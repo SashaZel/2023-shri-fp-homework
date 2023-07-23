@@ -15,14 +15,7 @@ import * as R from "ramda";
  * Если какие либо функции написаны руками (без использования библиотек) это не является ошибкой
  */
 
-// 1. Красная звезда, зеленый квадрат, все остальные белые.
-export const validateFieldN1 = ({star, square, triangle, circle}) => {
-    if (triangle !== 'white' || circle !== 'white') {
-        return false;
-    }
 
-    return star === 'red' && square === 'green';
-};
 
 // console.clear();
 
@@ -45,12 +38,6 @@ const squareProp = R.prop("square");
 const circleProp = R.prop("circle");
 const starProp = R.prop("star");
 
-// const starIsRed = R.propEq("star", "red");
-// const starIsGreen = R.propEq("star", "green");
-// const starIsBlue = R.propEq("star", "blue");
-// const starIsWhite = R.propEq("star", "white");
-// const starIsOrange = R.propEq("star", "orange");
-// console.log(isRed("green"));
 const isRedStar = R.compose(isRed, starProp);
 const isBlueStar = R.compose(isBlue, starProp);
 const isWhiteStar = R.compose(isWhite, starProp);
@@ -155,6 +142,15 @@ const isNotWhiteTriangle = R.compose(R.not, isWhiteTriangle);
 
 const hasEqualSquareAndTriangle = R.converge(R.equals, [squareProp, triangleProp]);
 const hasEqualSquareAndTriangleButNotWhite = R.allPass([hasEqualSquareAndTriangle, isNotWhiteSquare, isNotWhiteTriangle]);
+
+// 1. Красная звезда, зеленый квадрат, все остальные белые.
+export const validateFieldN1 = ({star, square, triangle, circle}) => {
+    if (triangle !== 'white' || circle !== 'white') {
+        return false;
+    }
+
+    return star === 'red' && square === 'green';
+};
 
 // 2. Как минимум две фигуры зеленые.
 export const validateFieldN2 = twoIsGreen;
