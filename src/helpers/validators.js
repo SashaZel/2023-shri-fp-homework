@@ -15,15 +15,7 @@ import * as R from "ramda";
  * Если какие либо функции написаны руками (без использования библиотек) это не является ошибкой
  */
 
-
-
-// console.clear();
-
-// console.log("hi");
-const myObj = { star: "blue", triangle: "blue", circle: "red", square: "blue" };
-
 // Functions predicates
-const isTwo = R.equals(2);
 const isGreaterOrEqualTwo = R.lte(2);
 // console.log(isGreaterOrEqualTwo(1))
 
@@ -39,13 +31,11 @@ const circleProp = R.prop("circle");
 const starProp = R.prop("star");
 
 const isRedStar = R.compose(isRed, starProp);
-const isBlueStar = R.compose(isBlue, starProp);
 const isWhiteStar = R.compose(isWhite, starProp);
 const isGreenStar = R.compose(isGreen, starProp);
 const isOrangeStar = R.compose(isOrange, starProp);
 
 const isWhiteTriangle = R.compose(isWhite, triangleProp);
-const isRedTriangle = R.compose(isRed, triangleProp);
 const isGreenTriangle = R.compose(isGreen, triangleProp);
 const isOrangeTriangle = R.compose(isOrange, triangleProp);
 
@@ -54,10 +44,9 @@ const isOrangeSquare = R.compose(isOrange, squareProp);
 const isGreenSquare = R.compose(isGreen, squareProp);
 
 const isGreenCircle = R.compose(isGreen, circleProp);
-
+const isWhiteCircle = R.compose(isWhite, circleProp);
 const isBlueCircle = R.compose(isBlue, circleProp);
 const isOrangeCircle = R.compose(isOrange, circleProp);
-
 
 const twoIsGreen = R.compose(
     isGreaterOrEqualTwo,
@@ -76,27 +65,15 @@ const numberOfBlue = R.compose(
     R.filter(isBlue),
     R.values
 );
-// const numbersRedAndBlueAreEquals = R.equals(numberOfRed, numberOfBlue);
+
 const toSingleArr = (fns) => (val) => fns.map((fn) => fn(val));
-// const processString = toSingleArr([((a)=>a+1), ((a)=>a+"!")]);
+
 const countRedAndBlue = toSingleArr([numberOfRed, numberOfBlue]);
 const allEqual = arr => arr.every(val => val === arr[0]);
 const numberOfRedIsEqualsNumberOfBlue = R.compose(
     allEqual,
     countRedAndBlue
 )
-// console.log(toSingleArr([((a)=>a+1), ((a)=>a+"!")])("hi"));
-// console.log(processString("hi"));
-// console.log(countRedAndBlue(myObj));
-// console.log(numberOfRedIsEqualsNumberOfBlue(myObj));
-// const processHi = processString("hi");
-// console.log(R.ap([numberOfBlue, numberOfRed], [myObj]));
-
-
-// console.log(starIsRed(myObj));
-// console.log(isRedStarProp(myObj))
-// console.log(isAllGreen(myObj))
-// console.log(twoIsGreen(myObj))
 
 const blueCircleRedStarOrangeSquare = R.allPass([isBlueCircle, isRedStar, isOrangeSquare]);
 
@@ -128,14 +105,11 @@ const hasAnyRed = R.compose(
 
 const hasGreenTriangleGreenAnyRedAny = R.allPass([isGreenTriangle, hasTwoGreen, hasAnyRed]);
 
-// console.log(hasGreenTriangleGreenAnyRedAny(myObj));
-
 const isAllOrange = R.allPass([isOrangeCircle, isOrangeSquare, isOrangeStar, isOrangeTriangle]);
 
 const isNotRedStar = R.compose(R.not, isRedStar);
 const isNotWhiteStar = R.compose(R.not, isWhiteStar);
 const hasNotWhiteStarNotRedStar = R.allPass([isNotRedStar, isNotWhiteStar]);
-// console.log(isRedStar(myObj));
 
 const isNotWhiteSquare = R.compose(R.not, isWhiteSquare);
 const isNotWhiteTriangle = R.compose(R.not, isWhiteTriangle);
@@ -143,14 +117,10 @@ const isNotWhiteTriangle = R.compose(R.not, isWhiteTriangle);
 const hasEqualSquareAndTriangle = R.converge(R.equals, [squareProp, triangleProp]);
 const hasEqualSquareAndTriangleButNotWhite = R.allPass([hasEqualSquareAndTriangle, isNotWhiteSquare, isNotWhiteTriangle]);
 
-// 1. Красная звезда, зеленый квадрат, все остальные белые.
-export const validateFieldN1 = ({star, square, triangle, circle}) => {
-    if (triangle !== 'white' || circle !== 'white') {
-        return false;
-    }
+const redStarGreenSquareWhiteOthers = R.allPass([isRedStar, isGreenSquare, isWhiteTriangle, isWhiteCircle])
 
-    return star === 'red' && square === 'green';
-};
+// 1. Красная звезда, зеленый квадрат, все остальные белые.
+export const validateFieldN1 = redStarGreenSquareWhiteOthers;
 
 // 2. Как минимум две фигуры зеленые.
 export const validateFieldN2 = twoIsGreen;
